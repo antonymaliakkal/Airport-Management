@@ -79,9 +79,9 @@ class user(db.Model):
 
 @app.route('/')
 def home():
-    if(session.get('username')):
-        re
-    else:    
+    # if(session.get('username')):
+    #     re
+    # else:    
         return render_template("/login.html")
 
 @app.route('/signup' , methods = ['GET' , 'POST'])
@@ -103,32 +103,14 @@ def signup():
             print('Registered')
             # flash('Registered')
             if pe == 'e':
-                 return redirect(url_for('addcity'))
+                 #return redirect(url_for('addcity'))
+                 return render_template("addcity.html") 
             else:    
-                return render_template("/search.html")
+                return render_template("search.html")
     else:
         return redirect(url_for('home'))        
 
-# @app.route('/login' , methods = ['GET' , 'POST'])
-# def login():
-#     email = request.form['email']
-#     password = request.form['password']
-#     if(not(email or password)):
-#         flash('Enter all fields' , 'error')
-#     else:
-#         data = user.query.filter_by(email = email).all()
-#         if(len(data) > 0):
-#             # if(data.password == password):
-#                 print('succes')
-#                 session['email'] = email    
-#                 return redirect(url_for('home'))
-#             # else:
-#                 # print('Failed')    
-#                 # return redirect(url_for('home'))
-#         else:
-#                 print('Failed')    
-#                 return redirect(url_for('home'))   
-#     return render_template('/login.html')            
+       
 
 @app.route('/login', methods=['GET','POST'])
 def login():
@@ -139,8 +121,9 @@ def login():
             data = user.query.filter_by(name = request.form['name']).all()
             if(len(data))>0:
                 print('succes')
-                session['username']=request.form['email']
-                return redirect(url_for('addcity'))
+                session['username']=request.form['name']
+                # data= user.query.filter_by(name = request.form['name']).all()
+                return redirect(url_for('search')) 
             else:
                 print('failed')
                 # flash('Record was successfully added')
@@ -149,20 +132,25 @@ def login():
 
 
     
+# def search():
+#     # data = city.query.with_entities(city.city_name)
+#     data = city.query.filter_by(name='Ernakulam').first()
+#     print(data)
+#     for i in data:
+#         print(i)
+#     if request.method == 'POST':
+#         return render_template("search.html" , data = data)
+
+
+@app.route("/search" , methods = ['GET','POST'] )
 def search():
-    # data = city.query.with_entities(city.city_name)
-    data = city.query.filter_by(name='Ernakulam').first()
-    print(data)
-    for i in data:
-        print(i)
-    if request.method == 'POST':
+    if request.method == 'GET':
+        data = city.query.filter_by(name='Ernakulam')
+        print(data)
+        for i in data:
+            print(i)
         return render_template("search.html" , data = data)
-
-
-@app.route("/search1" , methods = ['GET','POST'] )
-def search1():
-    search()
-    return render_template("/search.html")
+        # return render_template("/search.html")
 
 @app.route('/addcity' , methods = ['GET' , 'POST'])
 def addcity():

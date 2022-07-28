@@ -1,0 +1,10 @@
+.body
+{
+    margin: 20%;
+}
+
+.options
+{
+    display: flex;
+    justify-content: space-evenly;
+}

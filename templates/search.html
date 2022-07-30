@@ -13,17 +13,18 @@
         <div>
             <label>FROM : </label>
             <select>
-            <!-- {for value in data} -->
-                <option>{{data.name}}</option> 
+            {% for value in data %} 
+                <option>{{value.name}}</option> 
+            {%endfor%}    
             </select>
         </div>
 
         <div>
             <label>TO : </label>
             <select>
-            {for value in data}
-                <option>{{value}}</option> 
-            </select>
+            {% for value in data %} 
+                <option>{{value.name}}</option> 
+            {%endfor%}   
         </div>
     </div>
     <button>Search</button>

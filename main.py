@@ -106,7 +106,7 @@ def signup():
                  #return redirect(url_for('addcity'))
                  return render_template("addcity.html") 
             else:    
-                return render_template("search.html")
+                return redirect(url_for('search')) 
     else:
         return redirect(url_for('home'))        
 
@@ -131,26 +131,17 @@ def login():
     return render_template('/login.html')
 
 
-    
-# def search():
-#     # data = city.query.with_entities(city.city_name)
-#     data = city.query.filter_by(name='Ernakulam').first()
-#     print(data)
-#     for i in data:
-#         print(i)
-#     if request.method == 'POST':
-#         return render_template("search.html" , data = data)
-
-
 @app.route("/search" , methods = ['GET','POST'] )
 def search():
     if request.method == 'GET':
-        data = city.query.filter_by(name='Ernakulam')
+        data = city.query.filter_by().all()
+        # data = user.query.filter_by(name = 'Jack').all()
         print(data)
         for i in data:
             print(i)
         return render_template("search.html" , data = data)
         # return render_template("/search.html")
+
 
 @app.route('/addcity' , methods = ['GET' , 'POST'])
 def addcity():

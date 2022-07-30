@@ -4,18 +4,28 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/addcity.css') }}">
     <title>Add City</title>
 </head>
 <body>
-    <h2>Add City</h2>
-    <div class = "add">
-        <form action="/addcity" method = "POST">
-            <input type="text" placeholder="enter city name" name="name"/>
-            <button type="submit">SUBMIT</button>
-        </form>    
+    
+    <div class = "container">
+        <br>
+        <h1>ADD CITY</h1>
+        <br>
+        <div class = "add">
+            <form action="/addcity" method = "POST">
+                <input type="text" placeholder="Enter city name....." name="name"/>
+                <button type="submit">SUBMIT</button>
+            </form>    
+        </div>
+        <br>
+        <div class = "search">
+            <form action="/search">
+            <button>SEARCH</button>
+            </form>
+        </div>
+        <br><br>
     </div>
-    <form action="/search1">
-        <button>SEARCH</button>
-    </form>    
 </body>
 </html>

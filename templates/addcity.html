@@ -6,7 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel = "stylesheet" href="{{ url_for('static',filename='styles/search.css') }}">
     <title>Add City</title>
-    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/addcity.css') }}">
+    <!-- <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/addcity.css') }}"> -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&family=Overpass:wght@100&display=swap');
+    </style>
     <title>Add City</title>
 </head>
 <body>
@@ -35,14 +38,28 @@
             </a>
         </ul>
       </nav>
-      <div id="app">  
-        <h1>to do list</h1>  
-        <ul>  
-        </ul>  
-        <input type="text" placeholder="New task">  
-        <button class='btn_add'>Add</button>  
-        <p>Insert a new task</p>  
-       </div>  
+    <div class="top">
+			<div id="app">  
+				<h1>Add City</h1> 
+				<form action="/addcity" method = "POST">
+					<input type="text" name="name" placeholder="City Name">  
+					<button class='btn_add'>Add</button>  
+				</form> 
+				<ul>  
+					{% if data %}
+					{% for value in data %}
+					<li>
+						<p>{{value.name}}</p>
+					</li>
+					{% endfor %}
+				{% else %}
+				<p>Insert a CITY</p>  
+				{% endif %}
+				</ul>  
+				
+				
+			</div>  
+		</div>
 
     <!-- <div class = "container">
         <br>

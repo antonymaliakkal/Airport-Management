@@ -34,16 +34,36 @@
         </ul>
       </nav>
 
-    <div class = "container">
-        <br>
-        <h1>ADD ROUTES</h1>
-        <form action="/addroute" method = "POST">
-            <input type = "text" placeholder="FROM..." name = "from" required>
-            <input type = "text" placeholder="TO..." name = "to" required>
-            <input type = "text" placeholder="PRICE.." name = "price" required>
-            <button type="submit">ADD ROUTE</button>
-        </form>
-        <br>
+    <div class="top">
+        <div class = "container">
+            <br>
+            <h1>ADD ROUTES</h1>
+            <form action="/addroute" method = "POST">
+                <!-- <input type = "text" placeholder="FROM..." name = "from" required> -->
+                <select name="from">
+                    {% for value in cities %} 
+                    <option value="{{value.name}}">{{value.name}}</option> 
+                    {%endfor%}    
+                    </select>
+                <!-- <input type = "text" placeholder="TO..." name = "to" required> -->
+                <select name="to">
+                    {% for value in cities %} 
+                        <option value="{{value.name}}">{{value.name}}</option> 
+                    {%endfor%}    
+                    </select>
+                <input type = "text" placeholder="PRICE.." name = "price" required>
+                <button type="submit">ADD ROUTE</button>
+            </form>
+            <br>
+        </div>
+        <div class="container c2">
+            {% for value in data %}
+                <div class="list-item">
+                    <p>{{value.From}}  --------> {{value.to}}</p>
+                    <p>{{value.price}}</p>
+                </div>
+            {% endfor %}
+        </div>
     </div>
 </body>
 </html>

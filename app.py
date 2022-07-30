@@ -2,6 +2,7 @@ import email
 import re
 from flask import Flask, render_template,request,flash,url_for,redirect,session
 from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
 
 
     
@@ -122,6 +123,7 @@ def login():
                 print('succes',data.p_e)
                 session['username']=request.form['name']
                 # data= user.query.filter_by(name = request.form['name']).all()
+                print(data.p_e)
                 if data.p_e == 'e':
                     return redirect(url_for('addcity')) 
                 else:
@@ -151,9 +153,8 @@ def addcity():
         data = city(name)
         db.session.add(data)
         db.session.commit()
-        return render_template('addcity.html')
-    elif request.method == 'GET':
-        return render_template('addcity.html')    
+    data = city.query.all()
+    return render_template('addcity.html', data = data)    
 
 @app.route('/addroute' , methods = ['GET' , 'POST'])
 def addroute():
@@ -164,9 +165,11 @@ def addroute():
         data = routes(From , to , price)
         db.session.add(data)
         db.session.commit()
-        return render_template('addroute.html')
-    elif request.method == 'GET':
-        return render_template('addroute.html')    
+    data = routes.query.all()
+    cities = city.query.all()
+    for i in data:
+        print(i.From)
+    return render_template('addroute.html', data= data, cities=cities)    
 
 
 @app.route('/addflight' , methods = ['GET' , 'POST'])
@@ -176,13 +179,16 @@ def addflight():
         name = request.form['name']
         rid = request.form['rid']
         date = request.form['date']
-        data = flights(name , num , rid ,date)
+        date_time_obj = datetime.strptime(date,'%Y-%m-%dT%H:%M')
+        data = flights(name , num , rid ,date_time_obj)
         db.session.add(data)
         db.session.commit()
-        return render_template('addflight.html')
-    elif request.method == 'GET':
-        return render_template('addflight.html')    
-
+    data = routes.query.all()
+    flights_data = flights.query.all()
+    for flight in flights_data:
+        route_doc = routes.query.filter_by(id=flight.r_id).first()
+        flight.rid=route_doc
+    return render_template('addflight.html', data=data, flights=flights_data)    
 
 
 if __name__ == "__main__":

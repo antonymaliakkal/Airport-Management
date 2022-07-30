@@ -34,17 +34,33 @@
         </ul>
       </nav>
 
-    <div class = "container">
-        <br>
-        <h1>ADD FLIGHT</h1>
-        <form action="/addflight" method = "POST">
-            <input type = "text" placeholder="FLIGHT NUMBER" name = "num" required>
-            <input type = "text" placeholder="FLIGHT NAME" name = "name" required>
-            <input type = "text" placeholder="ROUTE ID" name = "rid" required>
-            <input type = "text" placeholder="DATE" name = "date" required>     
-            <button type="submit">ADD FLIGHT</button>
-        </form>
-        <br>
+    <div class="top">
+        <div class = "container">
+            <br>
+            <h1>ADD FLIGHT</h1>
+            <form action="/addflight" method = "POST">
+                <input type = "text" placeholder="FLIGHT NUMBER" name = "num" required>
+                <input type = "text" placeholder="FLIGHT NAME" name = "name" required>
+                <!-- <input type = "text" placeholder="ROUTE ID" name = "rid" required> -->
+                <select name="rid">
+                    {% for value in data %} 
+                    <option value="{{value.id}}">{{value.From}}---->{{value.to}}</option> 
+                    {%endfor%}    
+                </select>
+                <input type = "datetime-local" placeholder="DATE" name = "date" required>     
+                <button type="submit">ADD FLIGHT</button>
+            </form>
+            <br>
+        </div>
+        <div class="container c2">
+            {% for value in flights %}
+                <div class="list-item">
+                    <p>{{value.name}}</p>
+                    <p>{{value.num}}</p>
+                    <p>{{value.rid.From}}  --------> {{value.rid.to}}</p>
+                </div>
+            {% endfor %}
+        </div>
     </div>
 
 </body>

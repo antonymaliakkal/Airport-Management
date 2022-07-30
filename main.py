@@ -2,6 +2,7 @@ import email
 import re
 from flask import Flask, render_template,request,flash,url_for,redirect,session
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import ForeignKey
 
 
     
@@ -32,7 +33,7 @@ class flights(db.Model):
     num = db.Column('flight_number' , db.Integer)
     name = db.Column('flight_name' , db.String(50))          
     # a_id = db.Column('airport_id' , db.Integer)
-    r_id = db.Column('route_id' , db.Integer)
+    r_id = db.Column('route_id' , db.Integer , ForeignKey("routes.route_id"))
     date = db.Column('date' , db.DateTime)
 
     def __init__(self , name , num , r_id,date):
@@ -134,12 +135,14 @@ def login():
 def search():
     if request.method == 'GET':
         data = city.query.filter_by().all()
-        # data = user.query.filter_by(name = 'Jack').all()
+        result = db.session.query(flights,routes).select_from(flights).join(routes).filter(flights.id == routes.id).all()
         print(data)
         for i in data:
             print(i)
-        return render_template("search.html" , data = data)
-        # return render_template("/search.html")
+        return render_template("search.html" , data = data , result = result)
+    elif request.method == 'POST':
+        result = db.session.query(flights,routes).select_from(flights).join(routes).filter(flights.id == routes.id).all()
+        return render_template("search.html" , data = data , result = result)
 
 
 @app.route('/addcity' , methods = ['GET' , 'POST'])

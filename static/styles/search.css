@@ -8,7 +8,7 @@
     display: flex;
     justify-content: space-evenly;
 }
-@import url("https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Lato:ital,wght@0,300;0,400;1,300;1,400&display=swap");  
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&family=Overpass:wght@100&display=swap');
 * {  
  margin: 0;  
  padding: 0;  
@@ -16,6 +16,8 @@
  box-sizing: border-box;  
  -webkit-font-smoothing: antialiased;  
  user-select: none;  
+ font-family: 'Dancing Script', cursive;
+font-family: 'Overpass', sans-serif;
 }  
 html,  
 body {  
@@ -27,7 +29,6 @@ a {
  color: inherit;  
 }  
 body {  
- display: flex;  
  justify-content: center;  
  align-items: center;  
  flex-direction: column;  
@@ -102,3 +103,67 @@ input {
 .btn_add:hover {  
  opacity: 0.9;  
 }  
+.top{
+    display: flex;
+    justify-content: center;
+    margin-top: 2em;
+}
+button {
+	border-radius: 20px;
+	border: 1px solid #FF4B2B;
+	background-color: #FF4B2B;
+	color: #FFFFFF;
+	font-size: 12px;
+	font-weight: bold;
+	padding: 12px 45px;
+	letter-spacing: 1px;
+	text-transform: uppercase;
+	transition: transform 80ms ease-in;
+}
+
+button:active {
+	transform: scale(0.95);
+}
+
+button:focus {
+	outline: none;
+}
+
+button.ghost {
+	background-color: transparent;
+	border-color: #FFFFFF;
+}
+.nav-list
+{
+    list-style: none;
+    display: flex;
+    background: #FF416C;
+   	background: -webkit-linear-gradient(to right, #FF4B2B, #FF416C);
+	  background: linear-gradient(to right, #FF4B2B, #FF416C);
+    margin: 0;
+    padding: 1.5em;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-link{
+  margin-right: 5em;
+  color: white;
+  font-weight: bold;
+  font-size: 32px;
+}
+.add-but{
+    border-radius: 10px;
+	border: 1px solid #FF4B2B;
+	/* background-color: #FF4B2B; */
+	color: #FFFFFF;
+	font-size: 12px;
+	font-weight: bold;
+	padding: 12px 25px;
+	letter-spacing: 1px;
+	text-transform: uppercase;
+	transition: transform 80ms ease-in;
+    background-color: transparent;
+	border-color: #FFFFFF;
+    transition: .5s;
+}

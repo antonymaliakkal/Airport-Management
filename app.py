@@ -104,9 +104,9 @@ def signup():
             # flash('Registered')
             if pe == 'e':
                  #return redirect(url_for('addcity'))
-                 return render_template("addcity.html") 
+                 return redirect(url_for('addcity')) 
             else:    
-                return render_template("search.html")
+                return redirect(url_for('search')) 
     else:
         return redirect(url_for('home'))        
 
@@ -118,12 +118,15 @@ def login():
         if not request.form['name'] or not request.form['password']:
             flash('Please enter all the fields', 'error')
         else:
-            data = user.query.filter_by(name = request.form['name']).all()
-            if(len(data))>0:
-                print('succes')
+            data = user.query.filter_by(name = request.form['name']).first()
+            if(data):
+                print('succes',data.p_e)
                 session['username']=request.form['name']
                 # data= user.query.filter_by(name = request.form['name']).all()
-                return redirect(url_for('search')) 
+                if data.p_e == 'e':
+                    return redirect(url_for('addcity')) 
+                else:
+                    return redirect(url_for('search')) 
             else:
                 print('failed')
                 # flash('Record was successfully added')
@@ -145,10 +148,10 @@ def login():
 @app.route("/search" , methods = ['GET','POST'] )
 def search():
     if request.method == 'GET':
-        data = city.query.filter_by(name='Ernakulam')
-        print(data)
+        data = city.query.all()
         for i in data:
             print(i)
+        print("called")
         return render_template("search.html" , data = data)
         # return render_template("/search.html")
 
@@ -159,7 +162,7 @@ def addcity():
         data = city(name)
         db.session.add(data)
         db.session.commit()
-        return render_template('addcity.html')
+    return render_template('addcity.html')
 
 
 if __name__ == "__main__":

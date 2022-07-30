@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Routes</title>
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/addroute.css') }}">
+</head>
+<body>
+
+    <nav>
+        <ul class="nav-list">
+            <li class="nav-link">
+               <a href='#' style="color: white; text-decoration: none;"> AIRPORT </a>
+            </li>
+            <div>
+            <a href="/addcity">
+              <button class="add-but">
+                    Add City
+              </button>
+            </a>
+            <a href="/addroute">
+              <button class="add-but">
+                  Add Route
+              </button>
+            </a>
+            </div>
+            <a href="/addflight">
+                <button class="add-but">
+                    Add Flight
+                </button>
+            </a>
+        </ul>
+      </nav>
+
+    <div class = "container">
+        <br>
+        <h1>ADD ROUTES</h1>
+        <form action="/addroute" method = "POST">
+            <input type = "text" placeholder="FROM..." name = "from" required>
+            <input type = "text" placeholder="TO..." name = "to" required>
+            <input type = "text" placeholder="PRICE.." name = "price" required>
+            <button type="submit">ADD ROUTE</button>
+        </form>
+        <br>
+    </div>
+</body>
+</html>

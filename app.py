@@ -2,6 +2,9 @@ import email
 import re
 from flask import Flask, render_template,request,flash,url_for,redirect,session
 from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
+
+from sqlalchemy import ForeignKey
 
 
     
@@ -18,25 +21,27 @@ class city(db.Model):
     def __init__(self ,name):
         self.name = name
 
-class airport(db.Model):
-    id = db.Column('airport_id' , db.Integer , primary_key = True)
-    name = db.Column('airport_name' , db.String(50))          
-    city = db.Column('city_id' , db.Integer)
+# class airport(db.Model):
+#     id = db.Column('airport_id' , db.Integer , primary_key = True)
+#     name = db.Column('airport_name' , db.String(50))          
+#     city = db.Column('city_id' , db.Integer)
 
-    def __init__(self , name , city):
-        self.name = name
-        self.city = city
+#     def __init__(self , name , city):
+#         self.name = name
+#         self.city = city
 
 class flights(db.Model):        
     id = db.Column('flight_id' , db.Integer , primary_key = True)
-    name = db.Column('airport_name' , db.String(50))          
-    a_id = db.Column('airport_id' , db.Integer)
-    r_id = db.Column('route_id' , db.Integer)
-    date = db.Column('date' , db.TIMESTAMP)
+    num = db.Column('flight_number' , db.Integer)
+    name = db.Column('flight_name' , db.String(50))          
+    # a_id = db.Column('airport_id' , db.Integer)
+    r_id = db.Column('route_id' , db.Integer , ForeignKey("routes.route_id") )
+    date = db.Column('date' , db.DateTime)
 
-    def __init__(self , name , a_id , r_id,date):
+    def __init__(self , name , num , r_id,date):
         self.name = name
-        self.a_id = a_id
+        # self.a_id = a_id
+        self.num = num
         self.r_id = r_id
         self.date = date
 
@@ -79,9 +84,6 @@ class user(db.Model):
 
 @app.route('/')
 def home():
-    # if(session.get('username')):
-    #     re
-    # else:    
         return render_template("/login.html")
 
 @app.route('/signup' , methods = ['GET' , 'POST'])
@@ -104,7 +106,7 @@ def signup():
             # flash('Registered')
             if pe == 'e':
                  #return redirect(url_for('addcity'))
-                 return render_template("addcity.html") 
+                 return redirect(url_for('addcity')) 
             else:    
                 return redirect(url_for('search')) 
     else:
@@ -118,12 +120,16 @@ def login():
         if not request.form['name'] or not request.form['password']:
             flash('Please enter all the fields', 'error')
         else:
-            data = user.query.filter_by(name = request.form['name']).all()
-            if(len(data))>0:
-                print('succes')
+            data = user.query.filter_by(name = request.form['name']).first()
+            if(data):
+                print('succes',data.p_e)
                 session['username']=request.form['name']
                 # data= user.query.filter_by(name = request.form['name']).all()
-                return redirect(url_for('search')) 
+                print(data.p_e)
+                if data.p_e == 'e':
+                    return redirect(url_for('addcity')) 
+                else:
+                    return redirect(url_for('search')) 
             else:
                 print('failed')
                 # flash('Record was successfully added')
@@ -133,14 +139,18 @@ def login():
 
 @app.route("/search" , methods = ['GET','POST'] )
 def search():
+    data = routes.query.all()
+    result = db.session.query(flights , routes).outerjoin(flights , flights.r_id == routes.id)
     if request.method == 'GET':
-        data = city.query.filter_by().all()
-        # data = user.query.filter_by(name = 'Jack').all()
-        print(data)
         for i in data:
             print(i)
-        return render_template("search.html" , data = data)
-        # return render_template("/search.html")
+        print("called")
+        return render_template('search.html', data=data , result = result)   
+
+    elif request.method == 'POST':
+        rid = request.form['rid']
+        result = db.session.query(flights , routes).outerjoin(flights , flights.r_id == rid)
+        render_template('search.html' , data = data , reuslt = result)
 
 
 @app.route('/addcity' , methods = ['GET' , 'POST'])
@@ -150,7 +160,42 @@ def addcity():
         data = city(name)
         db.session.add(data)
         db.session.commit()
-        return render_template('addcity.html')
+    data = city.query.all()
+    return render_template('addcity.html', data = data)    
+
+@app.route('/addroute' , methods = ['GET' , 'POST'])
+def addroute():
+    if request.method == "POST":
+        From = request.form['from']
+        to = request.form['to']
+        price = request.form['price']
+        data = routes(From , to , price)
+        db.session.add(data)
+        db.session.commit()
+    data = routes.query.all()
+    cities = city.query.all()
+    for i in data:
+        print(i.From)
+    return render_template('addroute.html', data= data, cities=cities)    
+
+
+@app.route('/addflight' , methods = ['GET' , 'POST'])
+def addflight():
+    if request.method == 'POST':
+        num = request.form['num']
+        name = request.form['name']
+        rid = request.form['rid']
+        date = request.form['date']
+        date_time_obj = datetime.strptime(date,'%Y-%m-%dT%H:%M')
+        data = flights(name , num , rid ,date_time_obj)
+        db.session.add(data)
+        db.session.commit()
+    data = routes.query.all()
+    flights_data = flights.query.all()
+    for flight in flights_data:
+        route_doc = routes.query.filter_by(id=flight.r_id).first()
+        flight.rid=route_doc
+    return render_template('addflight.html', data=data, flights=flights_data)    
 
 
 if __name__ == "__main__":

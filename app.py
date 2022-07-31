@@ -4,7 +4,7 @@ from flask import Flask, render_template,request,flash,url_for,redirect,session
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 
-from sqlalchemy import ForeignKey
+from sqlalchemy import ForeignKey, false
 
 
     
@@ -58,16 +58,12 @@ class routes(db.Model):
         
 class tickets(db.Model):
     id = db.Column('ticket_id' , db.Integer , primary_key = True)
-    r_id = db.Column('route_id' , db.Integer)
-    p_id = db.Column('passenger_id' , db.Integer)
-    price = db.Column('total_price' , db.Integer)
-    n = db.Column('Number of People' , db.Integer)
+    flight_id = db.Column('flight_id' , db.Integer, ForeignKey("flights.flight_id"))
+    p_id = db.Column('passenger_id' , db.Integer, ForeignKey("user.user_id"))
 
-    def __init__(self , r_id , p_id , price , n):
-        self.r_id = r_id
+    def __init__(self , flight_id , p_id):
+        self.flight_id = flight_id
         self.p_id = p_id
-        self.price = price
-        self.n = n
 
 class user(db.Model):
     id = db.Column('user_id' , db.Integer , primary_key = True)
@@ -108,7 +104,7 @@ def signup():
                  #return redirect(url_for('addcity'))
                  return redirect(url_for('addcity')) 
             else:    
-                return redirect(url_for('search')) 
+                return redirect(url_for('viewFlights')) 
     else:
         return redirect(url_for('home'))        
 
@@ -130,7 +126,7 @@ def login():
                 if data.p_e == 'e':
                     return redirect(url_for('addcity')) 
                 else:
-                    return redirect(url_for('search')) 
+                    return redirect(url_for('viewFlights')) 
             else:
                 print('failed')
                 # flash('Record was successfully added')
@@ -151,7 +147,7 @@ def search():
     elif request.method == 'POST':
         rid = request.form['rid']
         result = db.session.query(flights , routes).outerjoin(flights , flights.r_id == rid)
-        render_template('search.html' , data = data , reuslt = result)
+        return render_template('search.html' , data = data , reuslt = result)
 
 
 @app.route('/addcity' , methods = ['GET' , 'POST'])
@@ -200,11 +196,34 @@ def addflight():
 
 @app.route('/viewFlights' , methods = ['GET' , 'POST'])
 def viewFlights():
-    if request.method == 'GET' and session['type'] != 'e':
-        return render_template('p4.html')
+    data = routes.query.all()
+    result=False
+    if request.method == 'POST' and session['type'] != 'e':
+        rid = request.form['rid']
+        result = db.session.query(flights , routes).join(routes).filter(flights.r_id == rid).all()
+        for i in result:
+            if(tickets.query.filter_by(flight_id=i.flights.id,p_id=user.query.filter_by(name=session['username']).first().id).first()):
+                i.flights.booked = True
+    elif request.method == 'GET' and session['type'] != 'e':
+        result = db.session.query(flights ,tickets,routes).join(tickets).join(routes)
+    return render_template('p4.html' , data = data , result = result)
+
+@app.route('/book_tickets/<fid>')
+def book_tickets(fid):
+    data = flights.query.filter_by(id=fid).first()
+    u = user.query.filter_by(name=session['username']).first()
+    print(data,u)
+    data2 = tickets(data.id , u.id)
+    db.session.add(data2)
+    db.session.commit()
+    return redirect('/viewFlights')
+
 
 
 if __name__ == "__main__":
     db.create_all()
     app.run(host = '0.0.0.0' , debug = True)         
     
+
+
+

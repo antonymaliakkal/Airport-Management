@@ -343,3 +343,28 @@
     text-align: center;
     margin-bottom: 1em;
 }
+form{
+  display: flex;
+  justify-content: center;
+  padding: 15px;
+}
+form select{
+  padding: 5px;
+  border-color: #d5d5d5;
+  background: #f9f9f9;
+  border-radius: 5px;
+}
+form button{
+  margin-left: 10px;
+  border: none;
+  width: 6em;
+  background: #9a88a7;
+  color: white;
+  font-size: 11px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  border-radius: 5px;
+}
+.form button:focus-visible{
+  outline: none;
+}

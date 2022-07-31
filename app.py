@@ -122,6 +122,7 @@ def login():
             if(data):
                 print('succes',data.p_e)
                 session['username']=request.form['name']
+                session['type']=data.p_e
                 # data= user.query.filter_by(name = request.form['name']).all()
                 print(data.p_e)
                 if data.p_e == 'e':
@@ -190,7 +191,13 @@ def addflight():
         flight.rid=route_doc
     return render_template('addflight.html', data=data, flights=flights_data)    
 
+@app.route('/viewFlights' , methods = ['GET' , 'POST'])
+def viewFlights():
+    if request.method == 'GET' and session['type'] != 'e':
+        return render_template('p4.html')
+
 
 if __name__ == "__main__":
     db.create_all()
     app.run(host = '0.0.0.0' , debug = True)         
+    

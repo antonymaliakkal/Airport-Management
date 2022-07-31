@@ -4,29 +4,36 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel = "stylesheet" href="{{ url_for('static',filename='styles/login.css') }}">
+    <link rel = "stylesheet" href="{{ url_for('static',filename='styles/search.css') }}">
     <title>Search</title>
 </head>
 <body>
-    <h2>SEARCH FLIGHTS</h2>
-    <div class="options">
-        <div>
-            <label>FROM : </label>
-            <select>
-            {% for value in data %} 
-                <option>{{value.name}}</option> 
-            {%endfor%}    
-            </select>
-        </div>
+    <div class = "container">
+        <br>
+        <h1>SEARCH</h1>
+        <form action="/search" method = "POST">
 
-        <div>
-            <label>TO : </label>
-            <select>
-            {% for value in data %} 
-                <option>{{value.name}}</option> 
-            {%endfor%}   
-        </div>
+            <select name="rid">
+                {% for value in data %} 
+                <option value="{{value.id}}">{{value.From}}---->{{value.to}}</option> 
+                {%endfor%}    
+            </select>
+
+            <button type="submit">SEARCH</button>
+        </form>
+        <br>
     </div>
-    <button>Search</button>
+
+    <div class="container c2">
+        {% for value in result %}
+            <div class="list-item">
+                <p>{{value.name}}</p>
+                <p>{{value.num}}</p>
+                <p>{{value.From}}   {{value.to}}</p>
+                <p>{{value.date}}</p>
+            </div>
+        {% endfor %}
+    </div>
+    
 </body>
 </html>

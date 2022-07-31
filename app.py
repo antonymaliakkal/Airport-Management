@@ -4,6 +4,8 @@ from flask import Flask, render_template,request,flash,url_for,redirect,session
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 
+from sqlalchemy import ForeignKey
+
 
     
 app = Flask(__name__)
@@ -33,7 +35,7 @@ class flights(db.Model):
     num = db.Column('flight_number' , db.Integer)
     name = db.Column('flight_name' , db.String(50))          
     # a_id = db.Column('airport_id' , db.Integer)
-    r_id = db.Column('route_id' , db.Integer)
+    r_id = db.Column('route_id' , db.Integer , ForeignKey("routes.route_id") )
     date = db.Column('date' , db.DateTime)
 
     def __init__(self , name , num , r_id,date):
@@ -138,13 +140,18 @@ def login():
 
 @app.route("/search" , methods = ['GET','POST'] )
 def search():
+    data = routes.query.all()
+    result = db.session.query(flights , routes).outerjoin(flights , flights.r_id == routes.id)
     if request.method == 'GET':
-        data = city.query.all()
         for i in data:
             print(i)
         print("called")
-        return render_template("search.html" , data = data)
-        # return render_template("/search.html")
+        return render_template('search.html', data=data , result = result)   
+
+    elif request.method == 'POST':
+        rid = request.form['rid']
+        result = db.session.query(flights , routes).outerjoin(flights , flights.r_id == rid)
+        render_template('search.html' , data = data , reuslt = result)
 
 
 @app.route('/addcity' , methods = ['GET' , 'POST'])

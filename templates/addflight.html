@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Flight</title>
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/addroute.css') }}">
+</head>
+<body>
+
+    <nav>
+        <ul class="nav-list">
+            <div class="nav-top">
+                <li class="nav-link">
+                    <a href='#' style="color: white; text-decoration: none;"> AIRPORT </a>
+                 </li>
+                 <div>
+                 <a href="/addcity">
+                   <button class="add-but">
+                         Add City
+                   </button>
+                 </a>
+                 <a href="/addroute">
+                   <button class="add-but">
+                       Add Route
+                   </button>
+                 </a>
+                 <a href="/addflight">
+                     <button class="add-but">
+                         Add Flight
+                     </button>
+                 </a>
+                 </div>
+            </div>
+        </ul>
+      </nav>
+
+    <div class="top">
+        <div class = "container">
+            <br>
+            <h1>ADD FLIGHT</h1>
+            <form action="/addflight" method = "POST">
+                <input type = "text" placeholder="FLIGHT NUMBER" name = "num" required>
+                <input type = "text" placeholder="FLIGHT NAME" name = "name" required>
+                <!-- <input type = "text" placeholder="ROUTE ID" name = "rid" required> -->
+                <select name="rid">
+                    {% for value in data %} 
+                    <option value="{{value.id}}">{{value.From}}---->{{value.to}}</option> 
+                    {%endfor%}    
+                </select>
+                <input type = "datetime-local" placeholder="DATE" name = "date" required>     
+                <button type="submit">ADD FLIGHT</button>
+            </form>
+            <br>
+        </div>
+        <div class="container c2">
+            {% for value in flights %}
+                <div class="list-item">
+                    <p>{{value.name}}</p>
+                    <p>{{value.num}}</p>
+                    <p>{{value.rid.From}}  --------> {{value.rid.to}}</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+</body>
+</html>

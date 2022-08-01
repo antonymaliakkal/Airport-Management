@@ -8,7 +8,7 @@ body {
 	background: #f6f5f7;
 	font-family: 'Montserrat', sans-serif;
 	height: 100vh;
-	margin: -20px 0 50px;
+	margin: 0;
 	border: 0;
 	padding: 0;
 }
@@ -51,7 +51,7 @@ form {
 	text-align: center;
 }
 
-input {
+input,select {
 	background-color: #eee;
 	border: none;
 	padding: 12px 15px;
@@ -61,8 +61,6 @@ input {
 
 .container {
 	background-color: #fff;
-    margin-left: 400px;
-    margin-top: 150px;
 	border-radius: 10px;
   	box-shadow: 0 14px 28px rgba(0,0,0,0.25), 
 	0 10px 10px rgba(0,0,0,0.22);
@@ -122,4 +120,25 @@ input {
     border-color: white;
     color: #FF4B2B;
     font-weight: bold;
+}
+.top{
+	display: flex;
+	justify-content: center;
+	margin-top: 3em;
+	align-items: center;
+	flex-direction: column;
+}
+.c2{
+	width: 80% !important;
+	margin-bottom: 5em !important;
+	margin-top: 5em !important;
+	padding: 0 3em !important;
+}
+.list-item{
+	display: flex;
+	flex-direction: row;
+	justify-content: space-evenly;
+	padding: 10px 0;
+	border-bottom: 1px solid #cfcfcf;
+	margin: 0 15px 0 15px;
 }

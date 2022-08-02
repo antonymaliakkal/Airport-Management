@@ -11,6 +11,9 @@
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
    
    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style4.css') }}">
+   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Bangers&display=swap');
+    </style>
 
 </head>
 
@@ -20,9 +23,12 @@
             <header class="header">
                 <div class="container">
                     <nav class="nav">
-                        <a class="logo">
-                            <img src="static/images/logo1.png">
-                        </a>
+                        <div class="nav-cont">
+                            <a class="logo">
+                                <img src="static/images/logo1.png">
+                            </a>
+                            <h1 class="title">Airline Management System</h1>
+                        </div>
                         <div class="hamburger-menu">
                             <i class="fas fa-bars"></i>
                             <i class="fas fa-times"></i> 
@@ -32,13 +38,10 @@
                                 <a href="index.html" class="nav-link">Home</a>
                             </li>
                             <li class="nav-item">
-                                <a href="#" class="nav-link">About</a>
+                                <a href="#" class="nav-link">View Flights</a>
                             </li>
                             <li class="nav-item">
-                                <a href="#" class="nav-link">Offers</a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="#" class="nav-link">News</a>
+                                <a href="/logout" class="nav-link">logout</a>
                             </li>
                             <li class="nav-item">
                                 <a href="#" class="nav-link">Contact</a>
@@ -51,58 +54,69 @@
 
             <main>
                 <div class="hero">
-                    <h1 class="title">Airline Management System</h1>
-                </div>
-                <section class="planes">
-                    <form action="/viewFlights" method = "POST">
-
-                        <select name="rid">
-                            {% for value in data %} 
-                            <option value="{{value.id}}">{{value.From}}---->{{value.to}}</option> 
-                            {%endfor%}    
-                        </select>
-            
-                        <button type="submit">SEARCH</button>
-                    </form>
-                    <div class="container">
-                        <h3 class="section-head">
-                            <span class="headiing"><ul>Services</ul></span>
-                        </h3>
-                        {% if result %}
-                            {% for value in result %}
-                                <div class="grid">
-                                    <div class="grid-item planeservices">
-                                        <img src="static/images/logo1.png" alt="" class="plane-img">
-                                        <div class="det">
-                                            <div class="det1">
-                                                <h5 class="plane-name">{{value.routes.From}} - {{value.routes.to}}</h5>
-                                                <p>{{value.flights.name}}</p>
-                                            </div>
-                                            
-                                            <div class="det2">
-                                                <p>{{value.routes.price}}</p>
-                                                {% if value.flights.booked or (value.tickets and value.tickets.flight_id) %}
-                                                <a href="" class="btn btn-gradient">Tickets Booked!
-                                                    <span class="dots"><i class="fas fa-ellipsis-h"></i></span>
-                                                </a>
-                                                {% else %}
-                                                <a href="/book_tickets/{{value.flights.id}}" class="btn btn-gradient">Book Tickets
-                                                    <span class="dots"><i class="fas fa-ellipsis-h"></i></span>
-                                                </a>
-                                                {% endif %}
-                                            </div>
-                                        </div>
-                                    </div> 
-                                    
-                                </div>
-                            {% endfor %}
-                        {% endif %}
-                        
-
+                    <div class="overlay">
 
                     </div>
-                </section>
+                    <section class="planes">
+                        <form action="/viewFlights" method = "POST">
+    
+                            <select name="rid">
+                                {% for value in data %} 
+                                <option value="{{value.id}}">{{value.From}}---->{{value.to}}</option> 
+                                {%endfor%}    
+                            </select>
+                
+                            <button type="submit">SEARCH</button>
+                        </form>
+                        <div class="container">
+                            <h3 class="section-head">
+                                <span class="headiing"><ul>Services</ul></span>
+                            </h3>
+                            {% if result %}
+                                {% for value in result %}
+                                    <div class="grid">
+                                        <div class="grid-item planeservices">
+                                            <img src="static/images/logo.png" alt="" class="plane-img">
+                                            <div class="det">
+                                                <div class="det1">
+                                                    <h5 class="plane-name">{{value.routes.From}} - {{value.routes.to}}</h5>
+                                                    <p>{{value.flights.name}}</p>
+                                                </div>
+                                                
+                                                <div class="det2">
+                                                    <p>{{value.routes.price}}</p>
+                                                    {% if value.flights.booked or (value.tickets and value.tickets.flight_id) %}
+                                                    <a href="" class="btn btn-gradient">Tickets Booked!
+                                                        <span class="dots"><i class="fas fa-ellipsis-h"></i></span>
+                                                    </a>
+                                                    {% else %}
+                                                    <a href="/book_tickets/{{value.flights.id}}" class="btn btn-gradient">Book Tickets
+                                                        <span class="dots"><i class="fas fa-ellipsis-h"></i></span>
+                                                    </a>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div> 
+                                        
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                            
+    
+    
+                        </div>
+                    </section>
+                </div>
+                
             </main>
+            <script>
+                let header=document.querySelector('.header');
+                let hamburgerMenu=document.querySelector('.hamburger-menu');
+
+                hamburgerMenu.addEventListener('click',function() {
+                    header.classList.toggle('menu-open');
+                })
+            </script>
          </body>
          <script src="main.js"></script>
 </html>

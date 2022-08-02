@@ -14,3 +14,19 @@ body {
 	padding: 0;
 }
 
+.options
+{
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.log{
+    width: 60%;
+    display: flex;
+    justify-content: start;
+    height: fit-content;
+  }
+
+  tr{
+    border-bottom: 1px solid white;
+  }

@@ -4,36 +4,48 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel = "stylesheet" href="{{ url_for('static',filename='styles/search.css') }}">
+    <!-- <link rel = "stylesheet" href="{{ url_for('static',filename='styles/login.css') }}"> -->
     <title>Search</title>
 </head>
 <body>
-    <div class = "container">
-        <br>
-        <h1>SEARCH</h1>
-        <form action="/search" method = "POST">
-
-            <select name="rid">
-                {% for value in data %} 
-                <option value="{{value.id}}">{{value.From}}---->{{value.to}}</option> 
-                {%endfor%}    
+    <h2>SEARCH FLIGHTS</h2>
+    <div class="options">
+        <form action="/search">
+        <div>
+            <label>FROM : </label>
+            <select>
+            {% for value in data %} 
+                <option>{{value.name}}</option> 
+            {%endfor%}    
             </select>
 
-            <button type="submit">SEARCH</button>
+        <div>
+            <label>TO : </label>
+            <select>
+            {% for value in data %} 
+                <option>{{value.name}}</option> 
+            {%endfor%}   
+        </div>
+        <button type="submit">Search</button>
         </form>
-        <br>
-    </div>
-
-    <div class="container c2">
-        {% for value in result %}
-            <div class="list-item">
-                <p>{{value.name}}</p>
-                <p>{{value.num}}</p>
-                <p>{{value.From}}   {{value.to}}</p>
-                <p>{{value.date}}</p>
-            </div>
-        {% endfor %}
     </div>
     
+    <div class="log">
+        <table>
+            <th>ID</th>
+            <th>FLIGHT NAME</th>
+            <th>DATE</th>
+            <th>PRICE</th>
+            {% for value in result %}
+              <tr>
+                <td>{{value.id}} </td>
+                <td>{{value.name}} </td>
+                <td>{{value.date}}</td>
+                <td>{{value.price}}</td>
+              </tr>
+            {% endfor %}  
+        </table>
+    </div>
+
 </body>
 </html>

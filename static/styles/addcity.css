@@ -74,7 +74,11 @@ input {
 	min-height: 200px;
     text-align: center;
 }
-
+.nav-top{
+	display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
 
 .nav-list
 {
@@ -87,6 +91,9 @@ input {
     padding: 1.5em;
     justify-content: space-between;
     align-items: center;
+	height: 6em;
+    padding-bottom: 0;
+    padding-top: 0;
 }
 
 .nav-link{

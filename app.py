@@ -136,6 +136,8 @@ def login():
 
 @app.route("/search" , methods = ['GET','POST'] )
 def search():
+    if(session['username'] == ''):
+        return redirect('/login')
     data = routes.query.all()
     result = db.session.query(flights , routes).outerjoin(flights , flights.r_id == routes.id)
     if request.method == 'GET':
@@ -152,6 +154,8 @@ def search():
 
 @app.route('/addcity' , methods = ['GET' , 'POST'])
 def addcity():
+    if(session['username'] == ''):
+        return redirect('/login')
     if request.method == 'POST':
         name = request.form['name']
         data = city(name)
@@ -162,6 +166,8 @@ def addcity():
 
 @app.route('/addroute' , methods = ['GET' , 'POST'])
 def addroute():
+    if(session['username'] == ''):
+        return redirect('/login')
     if request.method == "POST":
         From = request.form['from']
         to = request.form['to']
@@ -178,6 +184,8 @@ def addroute():
 
 @app.route('/addflight' , methods = ['GET' , 'POST'])
 def addflight():
+    if(session['username'] == ''):
+        return redirect('/login')
     if request.method == 'POST':
         num = request.form['num']
         name = request.form['name']
@@ -196,6 +204,8 @@ def addflight():
 
 @app.route('/viewFlights' , methods = ['GET' , 'POST'])
 def viewFlights():
+    if(session['username'] == ''):
+        return redirect('/login')
     data = routes.query.all()
     result=False
     if request.method == 'POST' and session['type'] != 'e':
@@ -210,6 +220,8 @@ def viewFlights():
 
 @app.route('/book_tickets/<fid>')
 def book_tickets(fid):
+    if(session.get('username')!= True):
+        return redirect('/login')
     data = flights.query.filter_by(id=fid).first()
     u = user.query.filter_by(name=session['username']).first()
     print(data,u)
@@ -218,7 +230,10 @@ def book_tickets(fid):
     db.session.commit()
     return redirect('/viewFlights')
 
-
+@app.route('/logout')
+def logout():
+    session['username'] = ''
+    return redirect('/login')
 
 if __name__ == "__main__":
     db.create_all()

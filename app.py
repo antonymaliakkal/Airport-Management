@@ -1,5 +1,6 @@
 import email
 import re
+from tkinter.messagebox import NO
 from flask import Flask, render_template,request,flash,url_for,redirect,session
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
@@ -93,12 +94,16 @@ def signup():
         else:       
             if(request.form['pe'] == 'Employee'):
                 pe = 'e'
+                session['type']='e'
             else:
                 pe = 'p'
+                session['type']='p'
             data = user(name , email , password , pe)
             db.session.add(data)
             db.session.commit()
             print('Registered')
+            session['username']=name
+            
             # flash('Registered')
             if pe == 'e':
                  #return redirect(url_for('addcity'))
@@ -136,7 +141,7 @@ def login():
 
 @app.route("/search" , methods = ['GET','POST'] )
 def search():
-    if(session['username'] == ''):
+    if(session.get('username')== None):
         return redirect('/login')
     data = routes.query.all()
     result = db.session.query(flights , routes).outerjoin(flights , flights.r_id == routes.id)
@@ -154,7 +159,7 @@ def search():
 
 @app.route('/addcity' , methods = ['GET' , 'POST'])
 def addcity():
-    if(session['username'] == ''):
+    if(session.get('username')== None):
         return redirect('/login')
     if request.method == 'POST':
         name = request.form['name']
@@ -166,7 +171,7 @@ def addcity():
 
 @app.route('/addroute' , methods = ['GET' , 'POST'])
 def addroute():
-    if(session['username'] == ''):
+    if(session.get('username')== None):
         return redirect('/login')
     if request.method == "POST":
         From = request.form['from']
@@ -184,7 +189,7 @@ def addroute():
 
 @app.route('/addflight' , methods = ['GET' , 'POST'])
 def addflight():
-    if(session['username'] == ''):
+    if(session.get('username')== None):
         return redirect('/login')
     if request.method == 'POST':
         num = request.form['num']
@@ -204,7 +209,7 @@ def addflight():
 
 @app.route('/viewFlights' , methods = ['GET' , 'POST'])
 def viewFlights():
-    if(session['username'] == ''):
+    if(session.get('username')== None):
         return redirect('/login')
     data = routes.query.all()
     result=False
@@ -220,7 +225,7 @@ def viewFlights():
 
 @app.route('/book_tickets/<fid>')
 def book_tickets(fid):
-    if(session.get('username')!= True):
+    if(session.get('username')== None):
         return redirect('/login')
     data = flights.query.filter_by(id=fid).first()
     u = user.query.filter_by(name=session['username']).first()
@@ -232,7 +237,7 @@ def book_tickets(fid):
 
 @app.route('/logout')
 def logout():
-    session['username'] = ''
+    session['username'] = None
     return redirect('/login')
 
 if __name__ == "__main__":
